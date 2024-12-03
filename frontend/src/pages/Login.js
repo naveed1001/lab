@@ -39,7 +39,7 @@ const LoginPage = () => {
     }
 
     try {
-      const response = await fetch("https://mern-auth-one-rho.vercel.app//auth/login", {
+      const response = await fetch("https://mern-auth-one-rho.vercel.app/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
