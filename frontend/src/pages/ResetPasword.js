@@ -1,13 +1,23 @@
 import React, { useState } from 'react';
+import axios from 'axios'; 
 
 function ResetPassword() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage(`If this email exists, a reset link has been sent to ${email}`);
-    setEmail('');
+    setMessage('');
+    setError('');
+    
+    try {
+      await axios.post('http://localhost:8100/auth/request-reset', { email });
+      setMessage(`If this email exists, a reset link has been sent to ${email}`);
+      setEmail('');
+    } catch (err) {
+      setError('Failed to send reset link. Please try again.');
+    }
   };
 
   return (
@@ -17,6 +27,7 @@ function ResetPassword() {
           Reset Password
         </h2>
         {message && <p className="text-green-600 text-center mb-4">{message}</p>}
+        {error && <p className="text-red-600 text-center mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">

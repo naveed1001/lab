@@ -35,4 +35,20 @@ const loginvalidation = (req, res, next) => {
     next();
 };
 
-module.exports = { signupvalidation, loginvalidation };
+// forget password
+
+const validateEmail = (data) => {
+    const schema = Joi.object({
+      email: Joi.string().email().required(),
+    });
+    return schema.validate(data);
+  };
+  
+  const validatePassword = (data) => {
+    const schema = Joi.object({
+      password: Joi.string().min(6).required(),
+    });
+    return schema.validate(data);
+  };
+
+module.exports = { signupvalidation, loginvalidation,validateEmail, validatePassword  };
