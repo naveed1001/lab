@@ -45,7 +45,7 @@ function ResetPassword() {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+            className="w-full bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600 transition"
           >
             Send Reset Link
           </button>
