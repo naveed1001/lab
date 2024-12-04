@@ -41,7 +41,7 @@ const SignupPage = () => {
       return;
     }
     try {
-      const url = "https://mern-auth-one-rho.vercel.app/auth/signup";
+      const url = "http://localhost:8100/auth/signup";
       const response = await fetch(url, {
         method: "POST",
         headers: {
