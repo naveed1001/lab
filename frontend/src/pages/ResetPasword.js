@@ -12,7 +12,7 @@ function ResetPassword() {
     setError('');
     
     try {
-      await axios.post('https://mern-auth-api-five.vercel.app/auth/request-reset', { email });
+      await axios.post('http://localhost:8100/auth/request-reset', { email });
       setMessage(`If this email exists, a reset link has been sent to ${email}`);
       setEmail('');
     } catch (err) {

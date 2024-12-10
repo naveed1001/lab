@@ -31,7 +31,7 @@ function SetNewPassword() {
     }
 
     try {
-      await axios.post('https://mern-auth-api-five.vercel.app/auth/reset-password', { token, password });
+      await axios.post('http://localhost:8100/auth/reset-password', { token, password });
       setMessage('Password has been reset successfully.');
       setTimeout(() => {
         navigate('/login'); 
