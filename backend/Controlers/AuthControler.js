@@ -10,7 +10,7 @@ const signup = async (req, res) => {
         const user = await UserModel.findOne({ email });
         if (user) {
             return res.status(409).json({
-                message: "User already exists. You can login.",
+                message: "User already exists You can login.",
                 success: false
             });
         }
@@ -37,16 +37,14 @@ const login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Check if the user exists
         const user = await UserModel.findOne({ email });
         if (!user) {
             return res.status(404).json({
-                message: "User not found. Please sign up.",
+                message: "User not found Please sign up.",
                 success: false
             });
         }
 
-        // Compare the password with the stored hash
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({
@@ -55,13 +53,12 @@ const login = async (req, res) => {
             });
         }
 
-        // Optionally, generate a JWT token (for stateless authentication)
         const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '24h' });
 
         res.status(200).json({
             message: "Login successful",
             success: true,
-            token: token // Send the token back to the client
+            token: token 
         });
     } catch (error) {
         console.error(error);
