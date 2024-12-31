@@ -26,10 +26,12 @@ const HomePage = () => {
         >
           Log Out
         </button>
+        <Link to='/admindashboard' className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">User Role</Link>
       </header>
 
       <main className="p-8">
         <div className="bg-white p-10 rounded-lg shadow-lg text-center">
+          
           <h1 className="text-4xl font-bold text-indigo-600 mb-4">Welcome to Our App</h1>
           <p className="text-gray-700 text-lg mb-6">
             Explore our features and get started by signing up or logging in.

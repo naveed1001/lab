@@ -3,7 +3,7 @@ const connectDB = require('./Models/db');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const AuthRouter = require('./Routes/AuthRouter');
-const ProductRouter = require('./Routes/ProductRouter')
+// const ProductRouter = require('./Routes/ProductRouter')
 
 require('dotenv').config();
 
@@ -21,7 +21,7 @@ app.get('/ping', (req, res) => res.send('pong'));
 app.use('/auth', AuthRouter);
 
 // Testing Purpose
-app.use('/products', ProductRouter);
+// app.use('/products', ProductRouter);
 
 
 // Start the Server
