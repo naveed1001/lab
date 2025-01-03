@@ -8,6 +8,7 @@ const {  verifyToken } = require('../Midlewares/RoleMidleware');
 const { authorize } = require('../Midlewares/RoleMidleware');
 const { authenticateAdmin } = require('../Midlewares/NewMidleware');
 const {createLabTest,getAllLabTests,updateLabTest,deleteLabTest} = require('../Controlers/LabsTest')
+const {exportCSV,upload,importCSV} = require('../Controlers/ExportData')
 // Signup Route
 router.post('/signup',  signupvalidation, signup);
 
@@ -39,5 +40,11 @@ router.get("/lab-tests",verifyToken,authorize(['admin']), getAllLabTests);
 
 router.put("/lab-tests/:id",verifyToken,authorize(['admin']),updateLabTest );
 router.delete("/lab-tests/:id",verifyToken,authorize(['admin']), deleteLabTest);
+
+
+router.get('/export/csv', exportCSV);
+router.post('/import/csv', upload.single('file'), importCSV);
+
+
 
 module.exports = router;

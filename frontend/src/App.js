@@ -8,11 +8,13 @@ import Login from './pages/Login';
 import ResetPasword from './pages/ResetPasword';
 import SetNewPassword from './pages/SetNewPassword';
 import AdminDashboard from './pages/AdminDashboard';
-// import Admin from './pages/AdminUser';
 import CreateAdmin from './pages/CreateNewAdmin';
 import CreateLabTestForm from './pages/Labs';
 import LabTestList from './pages/LabsList';
-// import LabTestUpdateForm from './pages/UpdateLabs';
+// import LabTestUpdate from './pages/UpdateLabs';
+// import CsvHandler from './pages/ImpExp';
+import ImportPage from './pages/Import';
+import ExportPage from './pages/Export';
 
 function App() {
   
@@ -35,8 +37,12 @@ function App() {
 
         <Route path="/labs-create" element={<CreateLabTestForm/>} />
         <Route path="/labs-list" element={<LabTestList/>} />
-        {/* <Route path="/labs-update/:id" element={<LabTestUpdateForm />} /> */}
-
+        {/* <Route path="/labs-update/:id" element={<LabTestUpdate/>} /> */}
+        
+        <Route path="/import" element={<ImportPage/>} /> 
+        <Route path="/export" element={<ExportPage/>} /> 
+        
+        
        
       </Routes>
     </div>

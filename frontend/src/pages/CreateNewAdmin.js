@@ -55,7 +55,8 @@ const CreateAdmin = ({ isEditMode = false }) => {
           setLoading(false);
         });
     }
-  }, [isEditMode, id]);
+    
+  }, [isEditMode, id,API_URL,loading]);
   
   const handleChange = (e) => {
     const { name, value } = e.target;
