@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from 'react-paginate';
+import Sidebar from "./Sidebar";
 
 const LabTestsList = () => {
   const [labTests, setLabTests] = useState([]);
@@ -22,7 +23,7 @@ const LabTestsList = () => {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [entriesPerPage, setEntriesPerPage] = useState(5);
-  const [file, setFile] = useState()
+
   const fetchLabTests = async () => {
     setLoading(true);
     setError("");
@@ -41,7 +42,7 @@ const LabTestsList = () => {
       setLoading(false);
     }
   };
-  console.log('loading', loading)
+
   const checkAdminRole = () => {
     const userToken = localStorage.getItem("authToken");
     if (userToken) {
@@ -60,9 +61,7 @@ const LabTestsList = () => {
       status: test.status,
       description: test.description || "",
     });
-
   };
-
 
   const handleDeleteClick = async (id) => {
     toast.info("Are you sure you want to delete this lab test?", {
@@ -88,8 +87,8 @@ const LabTestsList = () => {
     });
   };
 
-
   const navigate = useNavigate();
+
   const handleUpdateSubmit = async (e) => {
     e.preventDefault();
     const isDuplicate = labTests.some(
@@ -112,7 +111,6 @@ const LabTestsList = () => {
         }
       );
       toast.success("Lab test updated successfully!");
-
       setIsEditing(false);
       fetchLabTests();
     } catch (err) {
@@ -121,8 +119,6 @@ const LabTestsList = () => {
       );
     }
   };
-
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -144,18 +140,16 @@ const LabTestsList = () => {
       test.price.toString().includes(search)
   );
 
-  const totalpage = Math.ceil(filteredLabTests.length / entriesPerPage)
+  const totalpage = Math.ceil(filteredLabTests.length / entriesPerPage);
   const displaylabtest = filteredLabTests.slice(
     (currentPage - 1) * entriesPerPage,
     currentPage * entriesPerPage
-  )
+  );
 
   const handlePageChange = (data) => {
-    const selectedPage = data.selected + 1; 
+    const selectedPage = data.selected + 1;
     setCurrentPage(selectedPage);
   };
-  console.log('total', totalpage);
-  console.log('current', setCurrentPage);
 
   const downloadCSV = async () => {
     try {
@@ -166,19 +160,14 @@ const LabTestsList = () => {
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
-      // The blob() method reads the response body as a binary large object (Blob). 
-      // This converts the CSV data into a format that can be downloaded.
+
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
-      // The href attribute of the anchor element is set to the temporary URL 
-      //  which will be used to download the file.
       a.href = url;
       a.download = 'usersData.csv';
       document.body.appendChild(a);
-      // The click() method simulates a click on the anchor element, triggering the file download.
       a.click();
-      // After the click, the anchor element is removed from the DOM, as it's no longer needed.
       a.remove();
       window.URL.revokeObjectURL(url);
     } catch (error) {
@@ -186,235 +175,228 @@ const LabTestsList = () => {
     }
   };
 
-  const handleUpload = async () => {
-    if (!file) {
-      toast.error("Please select a file first.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const response = await fetch("http://localhost:8100/auth/import/csv", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Backend error:", errorData);
-        throw new Error("Failed to upload the file: " + errorData.message);
-      }
-
-      const data = await response.json();
-      toast.success(`${data.records} records imported successfully!`);
-      fetchLabTests();
-    } catch (error) {
-      console.error("Error details:", error);
-      toast.error("Error importing data: " + error.message);
-    }
-  };
-
-
   return (
-    <div className="mt-10">
-      <h2 className="text-xl font-semibold mb-4 mx-5">All Lab Tests</h2>
-      <button onClick={() => navigate('/labs-create')} className="bg-blue-400 text-white py-2 px-3 mb-5 rounded-md mx-5">Create New Lab Test</button>
-      <input
-        type="file"
-        onChange={(e) => setFile(e.target.files[0])}
-        className="mb-4 mx-4"
-      />
-      <button
-        className="bg-green-600 text-white rounded-md py-2 px-4"
-        onClick={handleUpload}
-      >
-        Import Labs
-      </button>
-      <button className="bg-yellow-600 text-white rounded-md py-2 px-4 mx-5"
-        onClick={downloadCSV}
-      >Export Labs</button> <br />
-      <label className="mx-4 font-semibold">Search:</label>
-      <input type="search" className=" px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-gray-700 mb-4  "
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-
-      />
-      <label className="mx-4 font-semibold">entries:</label>
-      <select
-        value={entriesPerPage}
-        onChange={(e) => setEntriesPerPage(Number(e.target.value))}
-        className="py-2 px-4 rounded mb-4 cursor-pointer"
-      >
-
-        <option value={5}>5</option>
-        <option value={10}>10</option>
-        <option value={15}>15</option>
-
-      </select>
-
-      {error && (
-        <div className="bg-red-100 text-red-600 p-4 rounded-md mb-4">
-          {error}
-        </div>
-      )}
-      {loading ? (
-        <p>Loading lab tests...</p>
-      ) : displaylabtest.length === 0 ? (
-        <p>No lab tests available.</p>
-      ) : (
-        <>
-          <table className="w-full border-collapse border border-gray-300">
-            <thead>
-              <tr>
-                <th className="border px-4 py-2">SI</th>
-                <th className="border px-4 py-2">Test Name</th>
-                <th className="border px-4 py-2">Test Code</th>
-                <th className="border px-4 py-2">Price</th>
-                <th className="border px-4 py-2">Status</th>
-                <th className="border px-4 py-2">Description</th>
-                {isAdmin && <th className="border px-4 py-2">Actions</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {displaylabtest.map((test, index) => (
-                <tr key={test._id}>
-                  <td className="border px-4 py-2">{index + 1}</td>
-                  <td className="border px-4 py-2">{test.testName}</td>
-                  <td className="border px-4 py-2">{test.testCode}</td>
-                  <td className="border px-4 py-2">{test.price}</td>
-                  <td className="border px-4 py-2">{test.status}</td>
-                  <td className="border px-4 py-2">{test.description || "N/A"}</td>
-                  {isAdmin && (
-                    <td className="border px-4 py-2">
-                      <button
-                        className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
-                        onClick={() => handleUpdateClick(test)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="bg-red-500 text-white px-2 py-1 rounded"
-                        onClick={() => handleDeleteClick(test._id)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="mt-4 flex justify-center">
-            <ReactPaginate
-              previousLabel={"Previous"}
-              nextLabel={"Next"}
-              pageCount={totalpage}
-              onPageChange={handlePageChange}
-              containerClassName={"flex space-x-2"}
-              pageClassName={"px-4 py-2 border border-gray-300 rounded"}
-              previousClassName={"px-4 py-2 border border-gray-300 rounded"}
-              nextClassName={"px-4 py-2 border border-gray-300 rounded"}
-              activeClassName={"bg-gray-700 text-white"}
-            />
-          </div>
-          {isEditing && (
-            <div className="mt-4 p-4 border border-gray-300 rounded">
-              <h3 className="text-xl font-semibold mb-2">Update Lab Test</h3>
-              <form onSubmit={handleUpdateSubmit}>
-                <div className="mb-2">
-                  <label className="block mb-1" htmlFor="testName">
-                    Test Name
-                  </label>
-                  <input
-                    type="text"
-                    id="testName"
-                    name="testName"
-                    value={updatedTest.testName}
-                    onChange={handleInputChange}
-                    className="border border-gray-300 p-2 w-full"
-                    required
-                  />
-                </div>
-                <div className="mb-2">
-                  <label className="block mb-1" htmlFor="testCode">
-                    Test Code
-                  </label>
-                  <input
-                    type="text"
-                    id="testCode"
-                    name="testCode"
-                    value={updatedTest.testCode}
-                    onChange={handleInputChange}
-                    className="border border-gray-300 p-2 w-full"
-                    required
-                  />
-                </div>
-                <div className="mb-2">
-                  <label className="block mb-1" htmlFor="price">
-                    Price
-                  </label>
-                  <input
-                    type="number"
-                    id="price"
-                    name="price"
-                    value={updatedTest.price}
-                    onChange={handleInputChange}
-                    className="border border-gray-300 p-2 w-full"
-                    required
-                  />
-                </div>
-                <div className="mb-2">
-                  <label className="block mb-1" htmlFor="status">
-                    Status
-                  </label>
-                  <input
-                    type="text"
-                    id="status"
-                    name="status"
-                    value={updatedTest.status}
-                    onChange={handleInputChange}
-                    className="border border-gray-300 p-2 w-full"
-                    required
-                  />
-                </div>
-                <div className="mb-2">
-                  <label className="block mb-1" htmlFor="description">
-                    Description
-                  </label>
-                  <textarea
-                    id="description"
-                    name="description"
-                    value={updatedTest.description}
-                    onChange={handleInputChange}
-                    className="border border-gray-300 p-2 w-full"
-                  />
-                </div>
-                <div className="flex justify-end mt-4">
-                  <button
-                    type="submit"
-                    className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                  >
-                    Update
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setIsEditing(false)}
-                    className="bg-gray-500 text-white px-4 py-2 rounded"
-                  >
-                    Cancel
-                  </button>
-                </div>
-
-
-              </form>
-
+    <div className="flex min-h-screen bg-gray-100">
+      <Sidebar />
+      <div className="flex flex-1 justify-center items-start bg-slate-50 p-6">
+        <div className="w-full max-w-6xl bg-white shadow-lg rounded-lg p-6 ml-64">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-6">All Lab Tests</h2>
+          <div className="mb-6 flex justify-between items-center">
+            <button
+              onClick={() => navigate('/labs-create')}
+              className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-600"
+            >
+              Create New Lab Test
+            </button>
+            <div className="space-x-4">
+              <button
+                className="bg-green-500 text-white py-2 px-4 rounded-lg shadow hover:bg-green-600"
+                onClick={() => navigate('/fileupload')}
+              >
+                Import Labs
+              </button>
+              <button
+                className="bg-yellow-500 text-white py-2 px-4 rounded-lg shadow hover:bg-yellow-600"
+                onClick={downloadCSV}
+              >
+                Export Labs
+              </button>
             </div>
+          </div>
 
+          <div className="flex items-center mb-4">
+            <label className="font-semibold mr-2">Search:</label>
+            <input
+              type="search"
+              className="p-2 border rounded-full focus:outline-none focus:ring focus:ring-blue-400"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <label className="font-semibold ml-4 mr-2">Entries per page:</label>
+            <select
+              value={entriesPerPage}
+              onChange={(e) => setEntriesPerPage(Number(e.target.value))}
+              className="py-2 px-4 rounded-full border focus:ring focus:ring-blue-400"
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={15}>15</option>
+            </select>
+          </div>
+
+          {error && (
+            <div className="bg-red-100 text-red-700 p-4 rounded-lg mb-6">
+              {error}
+            </div>
           )}
-        </>
-      )}
+
+          {loading ? (
+            <div className="text-center py-6">Loading lab tests...</div>
+          ) : displaylabtest.length === 0 ? (
+            <div className="text-center py-6">No lab tests available.</div>
+          ) : (
+            <>
+              <table className="w-full table-auto border-collapse border border-gray-300">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="border px-4 py-2 text-left">SI</th>
+                    <th className="border px-4 py-2 text-left">Test Name</th>
+                    <th className="border px-4 py-2 text-left">Test Code</th>
+                    <th className="border px-4 py-2 text-left">Price</th>
+                    <th className="border px-4 py-2 text-left">Status</th>
+                    <th className="border px-4 py-2 text-left">Description</th>
+                    {isAdmin && <th className="border px-4 py-2 text-left">Actions</th>}
+                  </tr>
+                </thead>
+                <tbody>
+                  {displaylabtest.map((test, index) => (
+                    <tr key={test._id}>
+                      <td className="border px-4 py-2">{index + 1}</td>
+                      <td className="border px-4 py-2">{test.testName}</td>
+                      <td className="border px-4 py-2">{test.testCode}</td>
+                      <td className="border px-4 py-2">{test.price}</td>
+                      <td className="border px-4 py-2">{test.status}</td>
+                      <td className="border px-4 py-2">{test.description || "N/A"}</td>
+                      {isAdmin && (
+                        <td className="border px-4 py-2">
+                          <button
+                            className="bg-blue-500 text-white px-3 py-1 rounded-lg mr-2 hover:bg-blue-600"
+                            onClick={() => handleUpdateClick(test)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600"
+                            onClick={() => handleDeleteClick(test._id)}
+                          >
+                            Delete
+                          </button>
+                          {/* <button
+                            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300"
+                            onClick={() => navigate('/order')}
+                          >
+                            Order
+                          </button> */}
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <div className="mt-6 flex justify-center">
+                <ReactPaginate
+                  previousLabel={"Previous"}
+                  nextLabel={"Next"}
+                  pageCount={totalpage}
+                  onPageChange={handlePageChange}
+                  containerClassName={"flex space-x-2"}
+                  pageClassName={"px-4 py-2 border border-gray-300 rounded-md"}
+                  previousClassName={"px-4 py-2 border border-gray-300 rounded-md"}
+                  nextClassName={"px-4 py-2 border border-gray-300 rounded-md"}
+                  activeClassName={"bg-blue-500 text-white"}
+                />
+              </div>
+
+              {isEditing && (
+                <div className="mt-6 p-6 border rounded-lg shadow-lg bg-white">
+                  <h3 className="text-xl font-semibold mb-4">Update Lab Test</h3>
+                  <form onSubmit={handleUpdateSubmit}>
+                    <div className="mb-4">
+                      <label className="block mb-2" htmlFor="testName">
+                        Test Name
+                      </label>
+                      <input
+                        type="text"
+                        id="testName"
+                        name="testName"
+                        value={updatedTest.testName}
+                        onChange={handleInputChange}
+                        className="w-full p-3 border border-gray-300 rounded-md"
+                        required
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="block mb-2" htmlFor="testCode">
+                        Test Code
+                      </label>
+                      <input
+                        type="text"
+                        id="testCode"
+                        name="testCode"
+                        value={updatedTest.testCode}
+                        onChange={handleInputChange}
+                        className="w-full p-3 border border-gray-300 rounded-md"
+                        required
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="block mb-2" htmlFor="price">
+                        Price
+                      </label>
+                      <input
+                        type="number"
+                        id="price"
+                        name="price"
+                        value={updatedTest.price}
+                        onChange={handleInputChange}
+                        className="w-full p-3 border border-gray-300 rounded-md"
+                        required
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="block mb-2" htmlFor="status">
+                        Status
+                      </label>
+                      <input
+                        type="text"
+                        id="status"
+                        name="status"
+                        value={updatedTest.status}
+                        onChange={handleInputChange}
+                        className="w-full p-3 border border-gray-300 rounded-md"
+                        required
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="block mb-2" htmlFor="description">
+                        Description
+                      </label>
+                      <textarea
+                        id="description"
+                        name="description"
+                        value={updatedTest.description}
+                        onChange={handleInputChange}
+                        className="w-full p-3 border border-gray-300 rounded-md"
+                      />
+                    </div>
+
+                    <div className="flex justify-end">
+                      <button
+                        type="submit"
+                        className="bg-blue-500 text-white py-2 px-4 rounded-md mr-4"
+                      >
+                        Update
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setIsEditing(false)}
+                        className="bg-gray-500 text-white py-2 px-4 rounded-md"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

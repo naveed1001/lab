@@ -69,19 +69,58 @@ const importCSV = async (req, res) => {
         continue;
       }
 
-      const newLabTest = new User({
-        testName,
-        testCode,
-        price,
-        status,
-      });
-
+      // Check if the record with the same testCode already exists
+      let existingRecord = null;
       try {
-        const saved = await newLabTest.save();
-        savedRecords.push(saved);
-      } catch (dbError) {
-        console.error('Error saving record to database:', dbError);
+        existingRecord = await User.findOne({ testCode });
+      } catch (findError) {
+        console.error('Error finding record:', findError);
         continue;
+      }
+
+      if (existingRecord) {
+        // Update the record if data has changed
+        if (
+          existingRecord.testName !== testName ||
+          existingRecord.price !== price ||
+          existingRecord.status !== status
+        ) {
+          existingRecord.testName = testName;
+          existingRecord.price = price;
+          existingRecord.status = status;
+
+          try {
+            const updated = await existingRecord.save();
+            savedRecords.push(updated);
+            console.log(`Updated record with testCode: ${testCode}`);
+          } catch (dbError) {
+            console.error('Error updating record in database:', dbError);
+            continue;
+          }
+        } else {
+          console.log(`No changes detected for testCode: ${testCode}, skipping update.`);
+        }
+      } else {
+        // Create a new record
+        const newLabTest = new User({
+          testName,
+          testCode,
+          price,
+          status,
+        });
+
+        try {
+          const saved = await newLabTest.save();
+          savedRecords.push(saved);
+          console.log(`Saved new record with testCode: ${testCode}`);
+        } catch (dbError) {
+          if (dbError.code === 11000) { 
+            console.error(`Duplicate testCode detected: ${testCode}, skipping.`);
+          } else {
+            console.error('Error saving new record to database:', dbError);
+          }
+          continue;
+        }
       }
     }
 
@@ -94,5 +133,6 @@ const importCSV = async (req, res) => {
     res.status(500).json({ message: 'Error importing CSV', error });
   }
 };
+
 
 module.exports = { exportCSV, upload, importCSV };

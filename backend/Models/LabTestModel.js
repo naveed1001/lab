@@ -9,6 +9,7 @@ const LabTestSchema = new Schema({
     testCode: {
         type: String,
         required: true,
+        unique: true,
     },
     price: {
         type: Number,

@@ -123,6 +123,19 @@ const updateUser = async (req, res) => {
     return res.status(500).json({ message: 'Server error. Failed to update user.' });
   }
 };
+const getAllAdmins = async (req, res) => {
+  try {
+    const admins = await UserModel.find({ role: 'admin' }).exec();
+
+    res.status(200).json({
+      admins,
+      totalAdmins: admins.length,
+    });
+  } catch (error) {
+    console.error("Error fetching all admins:", error.message);
+    return res.status(500).json({ message: 'Server error. Failed to fetch admins.' });
+  }
+};
 
 
-module.exports = { getAllUsers, deleteUser, getCurrentUser, updateUser, getUserById };
+module.exports = { getAllUsers, deleteUser, getCurrentUser, updateUser, getUserById,getAllAdmins };

@@ -46,6 +46,45 @@ const deleteLabTest = async (req, res) => {
   }
 };
 
+const getLabsById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log("req.params ", req.params);
 
-module.exports = { createLabTest,  getAllLabTests,updateLabTest ,deleteLabTest};
+    const labTest = await LabTestModel.findById(id); 
+    console.log("labTest ", labTest);  
+
+    if (!labTest) {
+      return res.status(404).json({ message: 'Lab Test not found' }); 
+    }
+
+    return res.status(200).json(labTest); 
+  } catch (error) {
+    console.error('Error fetching lab test:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const labsCurrentUser = async (req, res) => {
+  try {
+    const { userId } = req; 
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    const userLabTests = await LabTestModel.find({ createdBy: userId });
+    if (userLabTests.length === 0) {
+      return res.status(404).json({ message: "No Lab Tests found for this user" });
+    }
+
+    res.status(200).json(userLabTests);
+  } catch (error) {
+    console.error("Error fetching lab tests for current user:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+
+module.exports = { createLabTest,  getAllLabTests,updateLabTest ,deleteLabTest,getLabsById,labsCurrentUser};
 

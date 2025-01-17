@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactPaginate from 'react-paginate';
 import { useNavigate, useParams } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
@@ -41,7 +41,7 @@ const AdminDashboard = () => {
       toast.error(`Failed to delete user: ${err.response?.data?.message || 'Unknown error'}`);
     }
   };
-  console.log('id',id)
+  console.log('id', id)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -121,14 +121,17 @@ const AdminDashboard = () => {
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
+      
       <div className="w-64 bg-gray-800 text-white flex flex-col h-screen">
-        <h2 className="text-2xl font-bold p-4 text-center border-b border-gray-700">
+        <h2 className="text-2xl font-bold p-4 text-center border-b border-gray-700 cursor-pointer "
+        onClick={() => navigate('/admindashboard')}
+        >
           <span className="text-cyan-500">Das</span>hbo<span className="text-cyan-500">ard</span>
         </h2>
         <ul className="flex flex-col p-4 space-y-2">
           <li>
             <button
-              className={`w-full text-left px-4 py-2 rounded ${activeTab === 'currentUser' ? 'bg-gray-700' : ''}`}
+              className={`w-full text-left px-4 py-2 rounded-lg ${activeTab === 'currentUser' ? 'bg-gray-700' : ''}`}
               onClick={() => setActiveTab('currentUser')}
             >
               Current User
@@ -136,7 +139,7 @@ const AdminDashboard = () => {
           </li>
           <li>
             <button
-              className={`w-full text-left px-4 py-2 rounded ${activeTab === 'allUsers' ? 'bg-gray-700 text-white' : 'bg-gray-700 text-white'
+              className={`w-full text-left px-4 py-2 rounded-lg ${activeTab === 'allUsers' ? 'bg-gray-700 text-white' : 'bg-gray-700 text-white'
                 }`}
               onClick={() => setActiveTab('allUsers')}
             >
@@ -145,38 +148,87 @@ const AdminDashboard = () => {
           </li>
 
           {isAdmin && (
-            <li>
-              <button
-                className="w-full text-left px-4 py-2 rounded bg-gray-700"
-                onClick={() => navigate('/newadmin')}
-              >
-                Create Admin User
-              </button>
-            </li>
-          )}
+            <>
+              {/* Admin Actions */}
+              <li>
+                <select
+                  className="w-full text-left px-4 py-2 rounded-lg bg-gray-700 cursor-pointer"
+                  onChange={(e) => {
+                    const selectedValue = e.target.value;
+                    navigate(selectedValue);
+                  }}
+                >
+                  <option value="">Select Admin Action</option>
+                  <option value="/admins">All Admins</option>
+                  <option value="/newadmin">Create Admin User</option>
+                </select>
+              </li>
 
-          {isAdmin && (
-            <li>
-              <select
-                className="w-full text-left px-4 py-2 rounded bg-gray-700 cursor-pointer"
-                onChange={(e) => {
-                  const selectedValue = e.target.value;
-                  navigate(selectedValue);
-                }}
-              >
-                <option value="">Labs Test</option>
-                <option value="/labs-list">All Labs Test</option>
-                <option value="/labs-create">Create Lab Test</option>
-              </select>
-            </li>
+              {/* Lab Test Actions */}
+              <li>
+                <select
+                  className="w-full text-left px-4 py-2 rounded-lg bg-gray-700 cursor-pointer"
+                  onChange={(e) => {
+                    const selectedValue = e.target.value;
+                    navigate(selectedValue);
+                  }}
+                >
+                  <option value="">Select Lab Test Action</option>
+                  <option value="/labs-list">All Labs Test</option>
+                  <option value="/labs-create">Create Lab Test</option>
+                </select>
+              </li>
+             
+            </>
           )}
+        
+        {isAdmin && (
+            <>
+              <li>
+                <select
+                  className="w-full text-left px-4 py-2 rounded-lg bg-gray-700 cursor-pointer"
+                  onChange={(e) => {
+                    const selectedValue = e.target.value;
+                    navigate(selectedValue);
+                  }}
+                >
+                  <option value="">Create Patient Profile</option>
+                  <option value="/create-patient">Create Patient</option>
+                  <option value="/all-patient">All Patient</option>
+                </select>
+              </li>
 
+              <li>
+                <select
+                  className="w-full text-left px-4 py-2 rounded-lg bg-gray-700 cursor-pointer"
+                  onChange={(e) => {
+                    const selectedValue = e.target.value;
+                    navigate(selectedValue);
+                  }}
+                >
+                  <option value="">Create New Lab Profile</option>
+                  <option value="/create-new-lab">Create New Lab</option>
+                  <option value="/all-new-lab">All New Lab</option>
+                </select>
+              </li>
+              
+              <li>      
+            <Link to="/order" className="flex items-center p-2 mt-2 text-gray-300 rounded-lg hover:bg-gray-700 hover:text-white">
+              <span className="ml-3">Save Records</span>
+            </Link>
+          </li>
+             
+            </>
+          )}
+        
+        
 
         </ul>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-6 bg-gray-100 overflow-y-auto">
+      {/* <div className='flex flex-1 justify-center items-start bg-slate-300 p-6'> */}
+      <div className="flex-1 p-6 bg-gray-100 overflow-y-auto rounded-lg">
         {activeTab === 'currentUser' && (
           <div className="p-6 bg-white rounded-lg shadow-md">
             <h2 className="text-2xl font-semibold mb-4 text-gray-700">Current User Profile</h2>
@@ -217,7 +269,7 @@ const AdminDashboard = () => {
               <div className="mb-4">
                 <label htmlFor="entriesPerPage" className="mr-2 text-gray-700">Entries</label>
                 <select
-                value={usersPerPage}
+                  value={usersPerPage}
                   onChange={handleEntriesChange}
                   className="px-4 py-2 border border-gray-300 rounded-full cursor-pointer"
                 >
@@ -236,8 +288,8 @@ const AdminDashboard = () => {
                     <th className="border border-gray-200 px-4 py-2 text-left">Name</th>
                     <th className="border border-gray-200 px-4 py-2 text-left">Email</th>
                     <th className="border border-gray-200 px-4 py-2 text-left">Role</th>
-                    {isAdmin && <th className="border border-gray-200 px-4 py-2 text-left">Action</th>}
-                    {isAdmin && <th className="border border-gray-200 px-4 py-2 text-left">Edit</th>}
+                    {isAdmin && <th className="border border-gray-200 px-4 py-2 text-center">Action</th>}
+                    {/* {isAdmin && <th className="border border-gray-200 px-4 py-2 text-left">Edit</th>} */}
 
                   </tr>
                 </thead>
@@ -248,32 +300,28 @@ const AdminDashboard = () => {
                       <td className="border border-gray-200 px-4 py-2">{user.email}</td>
                       <td className="border border-gray-200 px-4 py-2">{user.role}</td>
                       {isAdmin && (
-                        <td className="border border-gray-200 px-4 py-2">
+                        <td className="border border-gray-200 px-4 py-2 text-center space-x-2">
                           <button
-                            className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                            className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
                             onClick={() => deleteUser(user._id)}
                           >
                             Delete
                           </button>
+                          {isAdmin && (
+
+                            <button
+                              className="bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-600"
+                              onClick={() => navigate(`/newadmin/${user._id}`)}
+                            >
+                              Update
+                            </button>
+
+                          )}
                         </td>
                       )}
-                      {isAdmin && (
-                        <td className="border border-gray-200 px-4 py-2">
-                          <button
-                            className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-                            onClick={() => navigate(`/newadmin/${user._id}`)}
-                          >
-                            Update
-                          </button>
-                        </td>
-                      )}
-
-
+                      
                     </tr>
-
-
                   ))}
-
                 </tbody>
               </table>
             </div>
@@ -296,6 +344,7 @@ const AdminDashboard = () => {
         )}
       </div>
     </div>
+    // </div>
   );
 };
 
