@@ -75,8 +75,9 @@ function App() {
           <Route path="/payment-success" element={<PaymentSuccess />} />
 
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/cart" element={<Cart />} />
           <Route path="/productlist" element={<ProductList />} />
+
+          <Route path="/cart" element={<Cart />} />
           
           
         </Routes>

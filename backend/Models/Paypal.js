@@ -1,5 +1,6 @@
 const axios = require('axios');
 
+// Get PayPal access token
 async function getAccessToken() {
     const response = await axios({
         url: process.env.PAYPAL_BASE_URL + '/v1/oauth2/token',
@@ -13,8 +14,10 @@ async function getAccessToken() {
     return response.data.access_token;
 }
 
+// Create order with PayPal
 async function createOrder(paymentDetails) {
     const accessToken = await getAccessToken();
+
     const response = await axios({
         url: process.env.PAYPAL_BASE_URL + '/v2/checkout/orders',
         method: 'post',
@@ -23,33 +26,38 @@ async function createOrder(paymentDetails) {
             Authorization: `Bearer ${accessToken}`,
         },
         data: {
-            intent: 'CAPTURE',
+            intent: 'CAPTURE', 
             purchase_units: [
                 {
                     items: paymentDetails.items,
                     amount: {
-                        currency_code: paymentDetails.currency_code,
-                        value: paymentDetails.total,
+                        currency_code: 'USD',
+                        value: paymentDetails.totalAmount,
                         breakdown: {
                             item_total: {
-                                currency_code: paymentDetails.currency_code,
-                                value: paymentDetails.total,
+                                currency_code: 'USD',
+                                value: paymentDetails.totalAmount,
                             },
                         },
                     },
                 },
             ],
             application_context: {
-                return_url: paymentDetails.return_url,
-                cancel_url: paymentDetails.cancel_url,
+                return_url: process.env.BASE_URL + '/payment-success',
+                cancel_url: process.env.BASE_URL + '/book',
             },
         },
     });
+
+    console.log("Create Order Response:", response.data);  
+
     return response.data;
 }
 
+// Capture the payment with the orderId
 async function capturePayment(orderId) {
     const accessToken = await getAccessToken();
+
     const response = await axios({
         url: `${process.env.PAYPAL_BASE_URL}/v2/checkout/orders/${orderId}/capture`,
         method: 'post',
@@ -58,7 +66,11 @@ async function capturePayment(orderId) {
             Authorization: `Bearer ${accessToken}`,
         },
     });
+
+    console.log("Capture Payment Response:", response.data);  
+
     return response.data;
 }
+
 
 module.exports = { createOrder, capturePayment };

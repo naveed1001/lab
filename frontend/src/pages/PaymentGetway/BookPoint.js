@@ -45,7 +45,7 @@ function BookAppointment() {
 
         setSuccessMessage('Appointment created successfully!');
         console.log('Response:', data); 
-        navigate('/checkout')
+        navigate('/productlist')
         setFormData({
           name: '',
           email: '',

@@ -1,84 +1,63 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+// import React from 'react';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { removeFromCart, clearCart } from '../';
+// import { useNavigate } from 'react-router-dom';
 
-const PaymentPage = () => {
-    const [loading, setLoading] = useState(false);
+// const Checkout = () => {
+//   const cart = useSelector((state) => state.cart);
+//   const dispatch = useDispatch();
+//   const navigate = useNavigate();
 
-    const handlePayment = async () => {
-        setLoading(true);
-        try {
-            const { data } = await axios.post('http://localhost:8100/book/orders', {
-                items: [
-                    {
-                        name: 'React Course',
-                        description: 'Learn React from scratch',
-                        quantity: 1,
-                        unit_amount: {
-                            currency_code: 'USD',
-                            value: '50.00',
-                        },
-                    },
-                ],
-                currency_code: 'USD',
-                total: '50.00',
-                return_url: 'http://localhost:3000/payment-success',
-                cancel_url: 'http://localhost:3000/payment-cancel',
-            });
-            console.log('Server Response:', data); 
-            if (data.approvalUrl) {
-                window.location.href = data.approvalUrl;
-            } else {
-                alert('Failed to get approval URL.');
-            }
-        } catch (error) {
-            console.error('Error initiating payment:', error.response || error);
-            alert('Error initiating payment.');
-        } finally {
-            setLoading(false);
-        }
-    };
-    
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 px-6 py-10">
-            <div className="bg-white shadow-md rounded-lg p-8 max-w-md w-full">
-                <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-                    PayPal Payment
-                </h1>
-                <p className="text-gray-600 text-center mb-8">
-                    Securely pay for your course using PayPal.
-                </p>
-                <div className="flex justify-center">
-                    <button
-                        onClick={handlePayment}
-                        disabled={loading}
-                        className={`px-6 py-3 font-semibold rounded-lg text-white ${
-                            loading
-                                ? 'bg-gray-400 cursor-not-allowed'
-                                : 'bg-blue-600 hover:bg-blue-700'
-                        } transition duration-200`}
-                    >
-                        {loading ? 'Processing...' : 'Pay with PayPal'}
-                    </button>
-                </div>
-                <div className="mt-6 text-sm text-gray-500 text-center">
-                    By proceeding, you agree to our{' '}
-                    <a
-                        href="/terms"
-                        className="text-blue-600 hover:underline"
-                    >
-                        Terms & Conditions
-                    </a>{' '}
-                    and{' '}
-                    <a
-                        href="/privacy"
-                        className="text-blue-600 hover:underline"
-                    >
-                        Privacy Policy
-                    </a>.
-                </div>
-            </div>
-        </div>
-    );
-};
+//   const handleRemove = (id) => {
+//     dispatch(removeFromCart({ id }));
+//   };
 
-export default PaymentPage;
+//   const handleProceedToBuy = () => {
+//     alert('Proceeding to payment...');
+//     navigate('/payment');
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-gray-100 px-6 py-10">
+//       <h1 className="text-2xl font-bold mb-6">Checkout</h1>
+//       {cart.items.length === 0 ? (
+//         <p>Your cart is empty.</p>
+//       ) : (
+//         <div>
+//           <ul className="space-y-4">
+//             {cart.items.map((item) => (
+//               <li
+//                 key={item.id}
+//                 className="flex justify-between items-center bg-white shadow-md p-4 rounded-lg"
+//               >
+//                 <div>
+//                   <p className="font-bold">{item.name}</p>
+//                   <p>${item.price.toFixed(2)}</p>
+//                   <p>Quantity: {item.quantity}</p>
+//                 </div>
+//                 <button
+//                   onClick={() => handleRemove(item.id)}
+//                   className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+//                 >
+//                   Remove
+//                 </button>
+//               </li>
+//             ))}
+//           </ul>
+//           <div className="mt-6 font-bold">
+//             <p>Total Items: {cart.totalItems}</p>
+//             <p>Total Amount: ${cart.totalAmount.toFixed(2)}</p>
+//           </div>
+//           <button
+//             onClick={handleProceedToBuy}
+//             className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+//           >
+//             Proceed to Buy
+//           </button>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default Checkout;

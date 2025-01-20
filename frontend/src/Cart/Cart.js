@@ -1,45 +1,120 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { removeFromCart } from '../store/Cartslice';
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { removeFromCart, updateQuantity } from "../store/Cartslice";
 
 const Cart = () => {
-  const cart = useSelector((state) => state.cart);
+  const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
 
-  const handleRemove = (id) => {
-    dispatch(removeFromCart({ id }));
+  // Calculate total price of all items in the cart
+  const totalPrice = cartItems.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+
+  const handlePurchase = async () => {
+    try {
+      const response = await fetch("http://localhost:8100/book/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          items: cartItems.map((item) => ({
+            name: item.name,
+            description: item.name,
+            quantity: item.quantity,
+            unit_amount: { currency_code: "USD", value: item.price },
+          })),
+          totalAmount: totalPrice,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create order");
+      }
+
+      const { approvalUrl } = await response.json();
+      window.location.href = approvalUrl;
+    } catch (error) {
+      console.error("Error during order creation:", error);
+      alert("Failed to initiate payment");
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 px-6 py-10">
-      <h1 className="text-2xl font-bold mb-6">Your Cart</h1>
-      {cart.items.length === 0 ? (
-        <p>Your cart is empty.</p>
+    <div className="mt-10 mx-auto max-w-4xl p-6 bg-white rounded-lg shadow-lg">
+      <h2 className="text-3xl font-bold mb-6 text-center text-gray-500">Your Cart</h2>
+      {cartItems.length === 0 ? (
+        <p className="text-gray-600 text-center">Your cart is empty.</p>
       ) : (
-        <ul className="space-y-4">
-          {cart.items.map((item) => (
-            <li
+        <div>
+          {cartItems.map((item) => (
+            <div
               key={item.id}
-              className="flex justify-between items-center bg-white shadow-md p-4 rounded-lg"
+              className="flex justify-between items-center mb-6 p-4 bg-gray-50 rounded-lg shadow-md hover:shadow-xl transition-all"
             >
-              <div>
-                <p className="font-bold">{item.name}</p>
-                <p>${item.price.toFixed(2)}</p>
-                <p>Quantity: {item.quantity}</p>
+              <div className="flex items-center space-x-4">
+                <div className="w-24 h-24 bg-gray-200 rounded-md overflow-hidden">
+                  <img
+                    src={item.imageUrl} 
+                    alt={item.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-800">{item.name}</h3>
+                  <p className="text-gray-600">Price: ${item.price}</p>
+                  <p className="text-gray-600">Quantity: {item.quantity}</p>
+                </div>
               </div>
-              <button
-                onClick={() => handleRemove(item.id)}
-                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-              >
-                Remove
-              </button>
-            </li>
+              <div className="flex items-center space-x-4">
+                <button
+                  className="px-3 py-1 bg-gray-300 rounded-full hover:bg-gray-400 focus:outline-none"
+                  onClick={() =>
+                    dispatch(
+                      updateQuantity({
+                        id: item.id,
+                        quantity: Math.max(1, item.quantity - 1),
+                      })
+                    )
+                  }
+                >
+                  -
+                </button>
+                <button
+                  className="px-3 py-1 bg-gray-300 rounded-full hover:bg-gray-400 focus:outline-none"
+                  onClick={() =>
+                    dispatch(
+                      updateQuantity({
+                        id: item.id,
+                        quantity: item.quantity + 1,
+                      })
+                    )
+                  }
+                >
+                  +
+                </button>
+                <button
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none"
+                  onClick={() => dispatch(removeFromCart({ id: item.id }))}
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
           ))}
-        </ul>
+          <div className="mt-6 flex justify-between items-center bg-gray-100 p-4 rounded-lg shadow-md">
+            <h3 className="text-2xl font-bold text-gray-800">Total: ${totalPrice}</h3>
+            <button
+              className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all focus:outline-none"
+              onClick={handlePurchase}
+            >
+              Purchase
+            </button>
+          </div>
+        </div>
       )}
-      <div className="mt-6 font-bold">
-        Total Items: {cart.totalItems}
-      </div>
     </div>
   );
 };

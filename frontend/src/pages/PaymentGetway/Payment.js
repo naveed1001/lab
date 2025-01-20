@@ -9,7 +9,7 @@ const PaymentGateway = () => {
         const capturePayment = async () => {
             try {
                 const queryParams = new URLSearchParams(location.search);
-                const orderId = queryParams.get('token'); 
+                const orderId = queryParams.get('token');
 
                 if (!orderId) {
                     throw new Error('Payment token is missing');
@@ -29,7 +29,7 @@ const PaymentGateway = () => {
                 const data = await response.json();
                 console.log('Capture Response:', data);
 
-                navigate('/payment-success');
+                navigate('/payment-success'); 
             } catch (error) {
                 console.error('Error capturing payment:', error);
                 alert('Payment failed!');
