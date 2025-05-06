@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const AuthRouter = require('./Routes/AuthRouter');
 const Bookappoint = require('./Routes/Bookappoint');
-const paypal = require('./Controlers/Paypal')
+const paypal = require('./Controlers/Paypal');
 
 require('dotenv').config();
 
