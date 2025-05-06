@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import { useAuth } from "./AuthContext"; 
 import "react-toastify/dist/ReactToastify.css";
 
+const baseUrl = process.env.REACT_APP_API_URL_DEV;
+
 const LoginPage = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -39,7 +41,7 @@ const LoginPage = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8100/auth/login", {
+      const response = await fetch(`${baseUrl}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

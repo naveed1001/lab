@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../Sidebar";
+const baseUrl = process.env.REACT_APP_API_URL_DEV;
+
 
 const UpdatePatientPage = () => {
     const { id } = useParams();
@@ -25,7 +27,7 @@ const UpdatePatientPage = () => {
     useEffect(() => {
         const fetchPatient = async () => {
             try {
-                const response = await fetch(`http://localhost:8100/auth/patient/${id}`);
+                const response = await fetch(`${baseUrl}/auth/patient/${id}`);
                 if (!response.ok) throw new Error("Failed to fetch patient data");
                 const data = await response.json();
                 setPatient(data);
@@ -59,7 +61,7 @@ const UpdatePatientPage = () => {
         setError("");
         setSuccess("");
         try {
-            const response = await fetch(`http://localhost:8100/auth/patient-update/${id}`, {
+            const response = await fetch(`${baseUrl}/auth/patient-update/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

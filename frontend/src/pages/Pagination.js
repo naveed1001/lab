@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+const baseUrl = process.env.REACT_APP_API_URL_DEV;
+
 
 const PaginatedUsers = ({ searchQuery }) => {
   const [users, setUsers] = useState([]);
@@ -18,7 +20,7 @@ const PaginatedUsers = ({ searchQuery }) => {
           return;
         }
 
-        const response = await axios.get(`http://localhost:8100/auth/users`, {
+        const response = await axios.get(`${baseUrl}/auth/users`, {
           params: { page: currentPage, limit: 10, search: searchQuery },
           headers: { Authorization: `Bearer ${token}` },
         });

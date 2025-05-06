@@ -2,14 +2,17 @@ const User = require('../Models/LabTestModel');
 const { Parser } = require('json2csv');
 const multer = require('multer');
 const csv = require('csvtojson');
-const path = require('path');
-const fs = require('fs');
-// path is used to handle and manipulate file paths,
-//  while fs is used to interact with the file system (e.g., reading and writing files).
 
-const uploadPath = 'F:/Download-Import';
-if (!fs.existsSync(uploadPath)) {
-  fs.mkdirSync(uploadPath, { recursive: true });
+// In backend/Controlers/ExportData.js
+const fs = require('fs');
+const path = require('path');
+
+// For Vercel deployment
+const downloadDir = process.env.VERCEL ? '/tmp/Download-Import' : 'F:/Download-Import';
+
+// Create directory if it doesn't exist
+if (!fs.existsSync(downloadDir)) {
+  fs.mkdirSync(downloadDir, { recursive: true });
 }
 
 const storage = multer.diskStorage({

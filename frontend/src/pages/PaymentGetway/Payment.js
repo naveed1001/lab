@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+const baseUrl = process.env.REACT_APP_API_URL_DEV;
+
 
 const PaymentGateway = () => {
     const location = useLocation();
@@ -15,7 +17,7 @@ const PaymentGateway = () => {
                     throw new Error('Payment token is missing');
                 }
 
-                const response = await fetch(`http://localhost:8100/book/orders/${orderId}/capture`, {
+                const response = await fetch(`${baseUrl}/book/orders/${orderId}/capture`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Sidebar from "./Sidebar";
+const baseUrl = process.env.REACT_APP_API_URL_DEV;
+
 
 const CreateLabTestForm = () => {
   const [formData, setFormData] = useState({
@@ -29,8 +31,7 @@ const CreateLabTestForm = () => {
     setError("");  
 
     try {
-      const response = await axios.post(
-        "http://localhost:8100/auth/lab-tests",
+      const response = await axios.post(`${baseUrl}/auth/lab-tests`,
         formData,
         {
           headers: {

@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ReactPaginate from 'react-paginate';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
@@ -16,6 +17,7 @@ const AdminDashboard = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [usersPerPage, setUsersPerPage] = useState(5);
+  const baseUrl = process.env.REACT_APP_API_URL_DEV;
 
 
   const navigate = useNavigate();
@@ -30,7 +32,7 @@ const AdminDashboard = () => {
         return;
       }
 
-      await axios.delete(`http://localhost:8100/auth/users/${id}`, {
+      await axios.delete(`${baseUrl}/auth/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -65,12 +67,12 @@ const AdminDashboard = () => {
 
         setIsAdmin(decoded.role === 'admin');
 
-        const userResponse = await axios.get('http://localhost:8100/auth/user', {
+        const userResponse = await axios.get(`${baseUrl}/auth/user`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCurrentUser(userResponse.data.user);
 
-        const usersResponse = await axios.get('http://localhost:8100/auth/users', {
+        const usersResponse = await axios.get(`${baseUrl}/auth/user`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -90,7 +92,7 @@ const AdminDashboard = () => {
     };
 
     fetchData();
-  }, []);
+  }, [baseUrl]);
 
   const filteredUsers = useMemo(() => {
     if (!searchQuery) return users;
