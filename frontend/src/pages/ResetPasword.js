@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios'; 
+const baseUrl = process.env.REACT_APP_API_URL_DEV;
+
 
 function ResetPassword() {
   const [email, setEmail] = useState('');
@@ -12,7 +14,7 @@ function ResetPassword() {
     setError('');
     
     try {
-      await axios.post('http://localhost:8100/auth/request-reset', { email });
+      await axios.post(`${baseUrl}/auth/request-reset`, { email });
       setMessage(`If this email exists, a reset link has been sent to ${email}`);
       setEmail('');
     } catch (err) {

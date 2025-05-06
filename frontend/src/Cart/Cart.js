@@ -1,6 +1,8 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart, updateQuantity } from "../store/Cartslice";
+const baseUrl = process.env.REACT_APP_API_URL_DEV;
+
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.items);
@@ -14,7 +16,7 @@ const Cart = () => {
 
   const handlePurchase = async () => {
     try {
-      const response = await fetch("http://localhost:8100/book/orders", {
+      const response = await fetch(`${baseUrl}/book/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

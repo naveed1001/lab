@@ -9,25 +9,33 @@ const paypal = require('./Controlers/Paypal');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 8080;
-// Connect to the Database
-connectDB();
+
+// Database Connection
+connectDB().catch(err => {
+  console.error('Database connection failed:', err);
+  process.exit(1);
+});
 
 // Middleware
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+  origin: [
+    process.env.FRONTEND_URL_DEV,
+    'http://localhost:3000' // For local development
+  ],
+  credentials: true
+}));
 
 // Routes
 app.get('/ping', (req, res) => res.send('pong'));
 app.use('/auth', AuthRouter);
 app.use('/book', Bookappoint);
 
-
-// Testing Purpose
-// app.use('/products', ProductRouter);
-
-
-// Start the Server
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+// Error Handling Middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Internal Server Error' });
 });
+
+// Export for Vercel (remove app.listen)
+module.exports = app;

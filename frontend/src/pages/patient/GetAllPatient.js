@@ -4,6 +4,8 @@ import Sidebar from '../Sidebar';
 import ReactPaginate from 'react-paginate';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+const baseUrl = process.env.REACT_APP_API_URL_DEV;
+
 
 const PatientList = () => {
     const [patients, setPatients] = useState([]);
@@ -17,7 +19,7 @@ const PatientList = () => {
     useEffect(() => {
         const fetchPatients = async () => {
             try {
-                const response = await fetch('http://localhost:8100/auth/patient-all');
+                const response = await fetch(`${baseUrl}/auth/patient-all`);
                 if (!response.ok) throw new Error('Failed to fetch patient data');
                 const data = await response.json();
                 setPatients(data);
@@ -49,7 +51,7 @@ const PatientList = () => {
     const handleDelete = (id) => {
         console.log('Delete patient with ID:', id);
         
-        fetch(`http://localhost:8100/auth/patient-delete/${id}`, {
+        fetch(`${baseUrl}/auth/patient-delete/${id}`, {
             method: 'DELETE',
         })
         .then(response => {

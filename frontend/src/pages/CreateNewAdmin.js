@@ -4,6 +4,8 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Sidebar from './Sidebar';
+const baseUrl = process.env.REACT_APP_API_URL_DEV;
+
 
 const CreateAdmin = ({ isEditMode = false }) => {
   const { id } = useParams(); 
@@ -32,7 +34,7 @@ const CreateAdmin = ({ isEditMode = false }) => {
   );
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8100';  
+  const API_URL = baseUrl || 'http://localhost:8100';  
 
   useEffect(() => {
     if (isEditMode && id) {

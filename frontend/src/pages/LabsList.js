@@ -5,6 +5,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from 'react-paginate';
 import Sidebar from "./Sidebar";
+const baseUrl = process.env.REACT_APP_API_URL_DEV;
+
 
 const LabTestsList = () => {
   const [labTests, setLabTests] = useState([]);
@@ -28,7 +30,7 @@ const LabTestsList = () => {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.get("http://localhost:8100/auth/lab-tests", {
+      const response = await axios.get(`${baseUrl}/auth/lab-tests`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
@@ -70,7 +72,7 @@ const LabTestsList = () => {
       draggable: false,
       onClose: async () => {
         try {
-          await axios.delete(`http://localhost:8100/auth/lab-tests/${id}`, {
+          await axios.delete(`${baseUrl}/auth/lab-tests/${id}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("authToken")}`,
             },
@@ -102,7 +104,7 @@ const LabTestsList = () => {
 
     try {
       await axios.put(
-        `http://localhost:8100/auth/lab-tests/${selectedTest._id}`,
+        `${baseUrl}/auth/lab-tests/${selectedTest._id}`,
         updatedTest,
         {
           headers: {
@@ -153,7 +155,7 @@ const LabTestsList = () => {
 
   const downloadCSV = async () => {
     try {
-      const response = await fetch('http://localhost:8100/auth/export/csv', {
+      const response = await fetch(`${baseUrl}/auth/export/csv`, {
         method: 'GET',
       });
 

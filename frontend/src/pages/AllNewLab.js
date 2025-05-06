@@ -11,13 +11,14 @@ const AllNewLab = () => {
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [entriesPerPage, setEntriesPerPage] = useState(5);
+    const baseUrl = process.env.REACT_APP_API_URL_DEV;
 
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchLabs = async () => {
             try {
-                const response = await fetch('http://localhost:8100/auth/newlab-all');
+                const response = await fetch(`${baseUrl}/auth/newlab-all`);
                 if (!response.ok) throw new Error('Failed to fetch lab data');
                 const data = await response.json();
                 setLabs(data);
@@ -27,9 +28,9 @@ const AllNewLab = () => {
                 setLoading(false);
             }
         };
-
+    
         fetchLabs();
-    }, []);
+    }, [baseUrl]);  // Add baseUrl here
 
     const totalPage = Math.ceil(labs.length / entriesPerPage);
     const displayedLabs = labs.slice(
@@ -49,7 +50,7 @@ const AllNewLab = () => {
     const handleDelete = (id) => {
         console.log('Delete lab with ID:', id);
         
-        fetch(`http://localhost:8100/auth/newlab-delete/${id}`, {
+        fetch(`${baseUrl}/auth/newlab-delete/${id}`, {
             method: 'DELETE',
         })
         .then(response => {

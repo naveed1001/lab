@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../pages/Sidebar';
+const baseUrl = process.env.REACT_APP_API_URL_DEV;
+
 
 function GetAdmins() {
   const [admins, setAdmins] = useState([]);
@@ -8,7 +10,7 @@ function GetAdmins() {
 
   const getAllAdmins = async () => {
     try {
-      const response = await fetch('http://localhost:8100/auth/admins');
+      const response = await fetch(`${baseUrl}/auth/admins`);
       if (!response.ok) {
         throw new Error(`Error fetching admins: ${response.statusText}`);
       }
