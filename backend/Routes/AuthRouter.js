@@ -1,24 +1,24 @@
 // routes.js (or wherever you define your routes)
 const router = require('express').Router();
-const { signup, login } = require('../Controlers/AuthControler');
-const { signupvalidation, loginvalidation } = require('../Midlewares/AuthValidation');
-const { requestReset, resetPassword } = require('../Controlers/restpassControler');
-const { getAllUsers, deleteUser, getCurrentUser, updateUser, getUserById,getAllAdmins} = require('../Controlers/UserController');
-const {  verifyToken } = require('../Midlewares/RoleMidleware');
-const { authorize } = require('../Midlewares/RoleMidleware');
-const { authenticateAdmin } = require('../Midlewares/NewMidleware');
-const {createLabTest,getAllLabTests,updateLabTest,deleteLabTest,getLabsById,labsCurrentUser } = require('../Controlers/LabsTest')
-const {exportCSV,upload,importCSV} = require('../Controlers/ExportData')
-const {CreatePatientProfile,getAll, UpdatePatient,deletePatient, getPatientById, PatientCurrentUser } = require('../Controlers/Patient')
+const { signup, login } = require('../Controllers/AuthControler');
+const { signupvalidation, loginvalidation } = require('../Middlewares/AuthValidation');
+const { requestReset, resetPassword } = require('../Controllers/restpassControler');
+const { getAllUsers, deleteUser, getCurrentUser, updateUser, getUserById,getAllAdmins} = require('../Controllers/UserController');
+const {  verifyToken } = require('../Middlewares/RoleMidleware');
+const { authorize } = require('../Middlewares/RoleMidleware');
+const { authenticateAdmin } = require('../Middlewares/NewMidleware');
+const {createLabTest,getAllLabTests,updateLabTest,deleteLabTest,getLabsById,labsCurrentUser } = require('../Controllers/LabsTest')
+const {exportCSV,upload,importCSV} = require('../Controllers/ExportData')
+const {CreatePatientProfile,getAll, UpdatePatient,deletePatient, getPatientById, PatientCurrentUser } = require('../Controllers/Patient')
 
-const {saveRecords} = require('../Controlers/Saverecord');
+const {saveRecords} = require('../Controllers/Saverecord');
 
 
 const {createnewLab,
     getnewAllLabs,
     getnewLabById,
     updatenewLabById,
-    deletenewLabById,} = require('../Controlers/CreateNewLab');
+    deletenewLabById,} = require('../Controllers/CreateNewLab');
 // Signup Route
 router.post('/signup',  signupvalidation, signup);
 

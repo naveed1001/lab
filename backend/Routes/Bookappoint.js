@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
-const { Createappoint} = require('../Controlers/Bookappoint');
-const {createOrder,capturePayment} = require('../Controlers/Paypal');
+const { Createappoint} = require('../Controllers/Bookappoint');
+const {createOrder,capturePayment} = require('../Controllers/Paypal');
 
 router.post('/createbook', Createappoint );
 

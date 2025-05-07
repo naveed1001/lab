@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const AuthRouter = require('./Routes/AuthRouter');
 const Bookappoint = require('./Routes/Bookappoint');
-const paypal = require('./Controlers/Paypal');
+const paypal = require('./Controllers/Paypal');
 
 require('dotenv').config();
 
@@ -18,6 +18,15 @@ connectDB().catch(err => {
 
 // Middleware
 app.use(bodyParser.json());
+
+app.use(cors({
+  origin: [
+    process.env.FRONTEND_URL_DEV,
+    'http://localhost:3000'
+  ],
+  credentials: true
+}));
+
 app.use(cors({
   origin: [
     process.env.FRONTEND_URL_DEV,
@@ -36,6 +45,12 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Internal Server Error' });
 });
+
+// For local development
+  const PORT = process.env.PORT || 8100;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 
 // Export for Vercel (remove app.listen)
 module.exports = app;

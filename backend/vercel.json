@@ -9,9 +9,10 @@
           "**/*.js",
           "Models/**",
           "Routes/**",
-          "Controlers/**",
-          "Midlewares/**",
-          "Download-Import/**"
+          "Controllers/**",
+          "Middlewares/**",
+          "Download-Import/**",
+          ".env"
         ]
       }
     }
