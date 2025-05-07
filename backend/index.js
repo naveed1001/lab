@@ -35,10 +35,17 @@ app.use(cors({
   credentials: true
 }));
 
+
+app.get('/', (req, res) => {
+  res.json({
+    status: 'API is working',
+    message: 'Welcome to the Lab System API'
+  });
+});
+
 // Routes
-app.get('/ping', (req, res) => res.send('pong'));
-app.use('/auth', AuthRouter);
-app.use('/book', Bookappoint);
+app.use('/api/auth', AuthRouter);
+app.use('/api/book', Bookappoint);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {

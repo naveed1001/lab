@@ -11,15 +11,18 @@
           "Routes/**",
           "Controllers/**",
           "Middlewares/**",
-          "Download-Import/**",
-          ".env"
+          "Download-Import/**"
         ]
       }
     }
   ],
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "/api/(.*)",
+      "dest": "/index.js"
+    },
+    {
+      "src": "/",
       "dest": "/index.js"
     }
   ]
