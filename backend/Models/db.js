@@ -2,32 +2,25 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   const options = {
-    serverSelectionTimeoutMS: 10000,
-    socketTimeoutMS: 45000,
-    connectTimeoutMS: 30000,
+    serverSelectionTimeoutMS: 30000,  // 30 seconds
+    socketTimeoutMS: 45000,          // 45 seconds
+    connectTimeoutMS: 30000,         // 30 seconds
     retryWrites: true,
     retryReads: true,
-    replicaSet: 'atlas-c4v1aq-shard-0',
+    replicaSet: 'atlas-c4v1aq-shard-0',  // From your error logs
     readPreference: 'primaryPreferred',
-    srvServiceName: 'mongodb',
-    directConnection: false,
-    tls: true,
+    tls: true,  // Use 'tls' instead of 'ssl' for newer MongoDB drivers
     appName: "AuthDB",
-    heartbeatFrequencyMS: 10000,
-    maxPoolSize: 10,
-    minPoolSize: 1,
-    dns: {
-      servers: ['8.8.8.8', '1.1.1.1'], // Google and Cloudflare DNS
-      timeout: 5000
-    }
+    // Remove sslValidate as it's not supported in newer drivers
   };
 
   try {
     await mongoose.connect(process.env.MONGO_URI, options);
     console.log('✅ MongoDB connected to:', mongoose.connection.host);
   } catch (err) {
-    console.error('❌ Connection failed:', {
+    console.error('❌ MongoDB connection failed:', {
       error: err.message,
+      fullError: JSON.stringify(err, null, 2),
       replicaSet: err.reason?.setName,
       servers: Object.keys(err.reason?.servers || {})
     });
