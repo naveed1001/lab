@@ -9,7 +9,7 @@
           "backend/**/*.js",
           "backend/Models/**",
           "backend/Routes/**",
-          "backend/Controlers/**"
+          "backend/Controllers/**"
         ]
       }
     },
