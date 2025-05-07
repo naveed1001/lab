@@ -28,19 +28,25 @@ app.use(cors({
   credentials: true
 }));
 
+
 app.get('/mongo-debug', async (req, res) => {
   try {
-    const connection = await connectDB();
+    const conn = await connectDB();
     
-    // Test actual database command
-    const pingResult = await connection.db.command({ ping: 1 });
-    
+    if (!conn || !conn.db) {
+      throw new Error('Connection established but DB reference missing');
+    }
+
+    // Test actual database operation
+    const pingResult = await conn.db.command({ ping: 1 });
+    const serverInfo = await conn.db.admin().serverStatus();
+
     res.json({
       connected: true,
       ping: pingResult,
-      replicaSet: connection.client.topology.s.description.setName,
-      primary: connection.client.topology.s.description.primary,
-      hosts: Array.from(connection.client.topology.s.description.servers.keys()),
+      replicaSet: conn.client.topology.s.description.setName,
+      primary: conn.client.topology.s.description.primary,
+      version: serverInfo.version,
       time: new Date()
     });
   } catch (err) {
@@ -50,13 +56,11 @@ app.get('/mongo-debug', async (req, res) => {
       details: {
         name: err.name,
         code: err.code,
-        replicaSet: err.reason?.setName
       },
       time: new Date()
     });
   }
 });
-
 
 app.get('/', (req, res) => {
   res.json({
