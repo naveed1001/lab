@@ -35,6 +35,21 @@ app.use(cors({
   credentials: true
 }));
 
+app.get('/mongo-status', async (req, res) => {
+  try {
+    const status = {
+      connected: mongoose.connection.readyState === 1,
+      host: mongoose.connection.host,
+      replicaSet: mongoose.connection.client?.topology?.description?.setName,
+      servers: Array.from(mongoose.connection.client?.topology?.description?.servers.keys() || []),
+      time: new Date()
+    };
+    res.json(status);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 app.get('/', (req, res) => {
   res.json({
