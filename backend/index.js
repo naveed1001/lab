@@ -28,26 +28,28 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(cors({
-  origin: [
-    process.env.FRONTEND_URL_DEV,
-    'http://localhost:3000' // For local development
-  ],
-  credentials: true
-}));
-
-app.get('/mongo-status', async (req, res) => {
+app.get('/mongo-debug', async (req, res) => {
   try {
+    // Test actual database operation
+    await mongoose.connection.db.command({ ping: 1 });
+    
     const status = {
-      connected: mongoose.connection.readyState === 1,
-      host: mongoose.connection.host,
-      replicaSet: mongoose.connection.client?.topology?.description?.setName,
-      servers: Array.from(mongoose.connection.client?.topology?.description?.servers.keys() || []),
+      connected: true,
+      replicaSet: mongoose.connection.client.topology.s.description.setName,
+      primary: mongoose.connection.client.topology.s.description.primary,
+      hosts: Array.from(mongoose.connection.client.topology.s.description.servers.keys()),
+      ok: 1,
       time: new Date()
     };
     res.json(status);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({
+      connected: false,
+      error: err.message,
+      stack: err.stack,
+      replicaSet: mongoose.connection?.client?.topology?.s?.description?.setName,
+      time: new Date()
+    });
   }
 });
 
