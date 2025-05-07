@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Sidebar from '../Sidebar';
 import { useNavigate } from 'react-router-dom';
+const baseUrl = process.env.REACT_APP_API_URL_DEV;
+
 
 function BookAppointment() {
   const [formData, setFormData] = useState({
@@ -29,7 +31,7 @@ function BookAppointment() {
     setSuccessMessage(null);
 
     try {
-        const response = await fetch('http://localhost:8100/book/createbook', {
+        const response = await fetch(`${baseUrl}/book/createbook`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

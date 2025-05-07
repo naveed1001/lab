@@ -3,6 +3,9 @@ import Sidebar from "./Sidebar";
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+const baseUrl = process.env.REACT_APP_API_URL_DEV;
+
 const CreateNewLab = () => {
   const [formData, setFormData] = useState({
     labName: "",
@@ -21,7 +24,7 @@ const CreateNewLab = () => {
     console.log("Form Data Submitted:", formData);
 
     try {
-        const response = await axios.post('http://localhost:8100/auth/create-new-lab',formData);
+        const response = await axios.post(`${baseUrl}/auth/create-new-lab`, formData);
 
         if(response.status === 201){
             console.log("Lab created:", response.data);

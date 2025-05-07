@@ -11,24 +11,26 @@ const CreateOrderForm = () => {
     const [selectedOption, setSelectedOption] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedRecords, setSelectedRecords] = useState([]);
+    const baseUrl = process.env.REACT_APP_API_URL_DEV;
+
 
     const navigate = useNavigate();
 
     useEffect(() => {
         axios
-            .get("http://localhost:8100/auth/newlab-all")
+            .get(`${baseUrl}/auth/newlab-all`)
             .then((response) => setLabs(response.data))
             .catch((error) => console.error("Error fetching labs:", error));
-    }, []);
+    }, [baseUrl]);  // Add baseUrl to dependencies
 
     useEffect(() => {
         if (selectedOption) {
             axios
-                .get(`http://localhost:8100/auth/lab-tests?labId=${selectedOption}`)
+                .get(`${baseUrl}/auth/lab-tests?labId=${selectedOption}`)
                 .then((response) => setFilteredData(response.data))
                 .catch((error) => console.error("Error fetching lab tests:", error));
         }
-    }, [selectedOption]);
+    }, [selectedOption, baseUrl]); // Add baseUrl here
 
     useEffect(() => {
         if (searchTerm) {
@@ -59,7 +61,7 @@ const CreateOrderForm = () => {
         }
 
         axios
-            .post("http://localhost:8100/auth/save-records", {
+            .post(`${baseUrl}/auth/save-records`, {
                 type: "Labs",
                 data: selectedRecords,
                 email: selectedLab.email,

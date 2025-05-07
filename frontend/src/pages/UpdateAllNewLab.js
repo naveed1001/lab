@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../pages/Sidebar";
+const baseUrl = process.env.REACT_APP_API_URL_DEV;
+
 
 const UpdateNewLab = () => {
     const { id } = useParams();
@@ -20,7 +22,7 @@ const UpdateNewLab = () => {
     useEffect(() => {
         const fetchLab = async () => {
             try {
-                const response = await fetch(`http://localhost:8100/auth/newlab/${id}`);
+                const response = await fetch(`${baseUrl}/auth/newlab/${id}`);
                 if (!response.ok) throw new Error("Failed to fetch lab data");
                 const data = await response.json();
                 setLab(data);
@@ -49,7 +51,7 @@ const UpdateNewLab = () => {
         setError("");
         setSuccess("");
         try {
-            const response = await fetch(`http://localhost:8100/auth/newlab-update/${id}`, {
+            const response = await fetch(`${baseUrl}/auth/newlab-update/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

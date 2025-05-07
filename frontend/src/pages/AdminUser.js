@@ -9,6 +9,8 @@ const Admin = () => {
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null); 
   const [isAdmin, setIsAdmin] = useState(false);
+  const baseUrl = process.env.REACT_APP_API_URL_DEV;
+
 
   // Fetch users and current user on component load
   useEffect(() => {
@@ -35,13 +37,13 @@ const Admin = () => {
         setIsAdmin(decoded.role === 'admin');
 
         // Fetch current user data
-        const currentUserResponse = await axios.get('http://localhost:8100/user', {
+        const currentUserResponse = await axios.get(`${baseUrl}/user`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCurrentUser(currentUserResponse.data);
 
         // Fetch all users
-        const usersResponse = await axios.get('http://localhost:8100/users', {
+        const usersResponse = await axios.get(`${baseUrl}/user`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(usersResponse.data);
@@ -60,7 +62,7 @@ const Admin = () => {
   const handleDeleteUser = async (id) => {
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.delete(`http://localhost:8100/users/${id}`, {
+      await axios.delete(`${baseUrl}/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(users.filter((user) => user._id !== id)); 

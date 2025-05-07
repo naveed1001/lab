@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Sidebar from "../Sidebar";
 import { useNavigate } from "react-router-dom";
+const baseUrl = process.env.REACT_APP_API_URL_DEV;
+
 
 const CreatePatientProfile = () => {
     const [formData, setFormData] = useState({
@@ -46,7 +48,7 @@ const CreatePatientProfile = () => {
         };
 
         try {
-            const response = await fetch('http://localhost:8100/auth/patient-create', {
+            const response = await fetch(`${baseUrl}/auth/patient-create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

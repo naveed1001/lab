@@ -4,6 +4,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 
+const baseUrl = process.env.REACT_APP_API_URL_DEV;
+
+
 function FileUpload() {
   const [file, setFile] = useState(null);
   const navigate = useNavigate();
@@ -18,7 +21,7 @@ function FileUpload() {
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://localhost:8100/auth/import/csv", {
+      const response = await fetch(`${baseUrl}/auth/import/csv`, {
         method: "POST",
         body: formData,
       });

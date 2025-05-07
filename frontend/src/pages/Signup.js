@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+const baseUrl = process.env.REACT_APP_API_URL_DEV;
+
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
@@ -42,7 +44,7 @@ const SignupPage = () => {
       return;
     }
     try {
-      const url = "http://localhost:8100/auth/signup";
+      const url = `${baseUrl}/auth/signup`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
