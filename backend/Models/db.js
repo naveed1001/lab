@@ -1,15 +1,23 @@
-// In your db.js or connection file
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
+  console.log("Attempting MongoDB connection with URI:", 
+    process.env.MONGO_URI.replace(/:[^@]+@/, ':*****@')); // Logs masked URI
+
   try {
     await mongoose.connect(process.env.MONGO_URI, {
-      serverSelectionTimeoutMS: 5000,  // 5 seconds timeout
-      socketTimeoutMS: 45000          // 45 seconds socket timeout
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 45000,
+      connectTimeoutMS: 30000,
+      maxPoolSize: 10
     });
-    console.log('MongoDB Connected - Naveed Ahmed...');
+    console.log("MongoDB connected successfully!");
   } catch (err) {
-    console.error('Database connection failed:', err.message);
+    console.error("MongoDB connection FAILED:", {
+      error: err.message,
+      stack: err.stack,
+      fullError: JSON.stringify(err, null, 2)
+    });
     process.exit(1);
   }
 };
