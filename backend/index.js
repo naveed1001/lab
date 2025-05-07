@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const AuthRouter = require('./Routes/AuthRouter');
 const Bookappoint = require('./Routes/Bookappoint');
 const paypal = require('./Controllers/Paypal');
+const mongoose = require('mongoose');
 
 require('dotenv').config();
 
