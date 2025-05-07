@@ -1,8 +1,8 @@
 const express = require('express');
-const connectDB = require('./Models/db');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const AuthRouter = require('./Routes/AuthRouter');
+const connectDB = require('./Models/db');
 const Bookappoint = require('./Routes/Bookappoint');
 const paypal = require('./Controllers/Paypal');
 const mongoose = require('mongoose');
@@ -30,24 +30,28 @@ app.use(cors({
 
 app.get('/mongo-debug', async (req, res) => {
   try {
-    // Test actual database operation
-    await mongoose.connection.db.command({ ping: 1 });
+    const connection = await connectDB();
     
-    const status = {
+    // Test actual database command
+    const pingResult = await connection.db.command({ ping: 1 });
+    
+    res.json({
       connected: true,
-      replicaSet: mongoose.connection.client.topology.s.description.setName,
-      primary: mongoose.connection.client.topology.s.description.primary,
-      hosts: Array.from(mongoose.connection.client.topology.s.description.servers.keys()),
-      ok: 1,
+      ping: pingResult,
+      replicaSet: connection.client.topology.s.description.setName,
+      primary: connection.client.topology.s.description.primary,
+      hosts: Array.from(connection.client.topology.s.description.servers.keys()),
       time: new Date()
-    };
-    res.json(status);
+    });
   } catch (err) {
     res.status(500).json({
       connected: false,
       error: err.message,
-      stack: err.stack,
-      replicaSet: mongoose.connection?.client?.topology?.s?.description?.setName,
+      details: {
+        name: err.name,
+        code: err.code,
+        replicaSet: err.reason?.setName
+      },
       time: new Date()
     });
   }
