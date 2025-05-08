@@ -2,20 +2,20 @@ const Joi = require('joi');
 
 const signupvalidation = (req, res, next) => {
     const schema = Joi.object({
-        firstName: Joi.string().required(),
-        lastName: Joi.string().required(),
+        firstName: Joi.string().min(1).required(),
+        lastName: Joi.string().min(1).required(),
+        email: Joi.string().email().required(),
+        password: Joi.string().min(6).max(100).required(),
+        confirmPassword: Joi.string().min(6).required(),
         practiceName: Joi.string().optional().allow(''),
         phone: Joi.string().required(),
         streetAddress: Joi.string().optional(),
         city: Joi.string().optional(),
         state: Joi.string().optional(),
         zip: Joi.string().optional(),
-        email: Joi.string().email().required(),
         username: Joi.string().required(),
         assignRoles: Joi.string().optional(),
         status: Joi.string().optional(),
-        password: Joi.string().min(6).required(),
-        confirmPassword: Joi.string().min(6).required(),
         name: Joi.string().optional(),
         role: Joi.string().optional(),
     });

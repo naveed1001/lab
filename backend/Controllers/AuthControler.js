@@ -34,7 +34,7 @@ const signup = async (req, res) => {
             });
         }
 
-        const fullName = name || `${firstName} ${lastName}`.trim();
+        const fullName = `${firstName} ${lastName}`.trim();
         if (!fullName) {
             return res.status(400).json({
                 message: "Name is required.",
