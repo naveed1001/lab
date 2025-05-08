@@ -1,6 +1,6 @@
 const UserModel = require('../Models/user');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken'); 
+const jwt = require('jsonwebtoken');
 const { sendConfirmationEmail } = require('../Controllers/emailsend');
 
 // Signup Controller
@@ -21,11 +21,8 @@ const signup = async (req, res) => {
             status,
             password,
             confirmPassword,
-            name,
             role
         } = req.body;
-
-        console.log("req.body ", req.body);
 
         if (password !== confirmPassword) {
             return res.status(400).json({
@@ -37,13 +34,12 @@ const signup = async (req, res) => {
         const fullName = `${firstName} ${lastName}`.trim();
         if (!fullName) {
             return res.status(400).json({
-                message: "Name is required.",
+                message: "First name and last name are required.",
                 success: false
             });
         }
 
         const existingUser = await UserModel.findOne({ email });
-        console.log("existingUser ", existingUser);
         if (existingUser) {
             return res.status(409).json({
                 message: "User already exists. You can login.",
@@ -51,21 +47,7 @@ const signup = async (req, res) => {
             });
         }
 
-        const userRole = assignRoles || role || 'user';
-
-        // if (req.user) {
-        //     console.log("Authenticated user registration, req.user:", req.user);
-        //     const loggedInUser = req.user;
-
-        //     if (loggedInUser.role !== 'admin' && userRole === 'admin') {
-        //         return res.status(403).json({
-        //             message: "Only admins can create another admin.",
-        //             success: false
-        //         });
-        //     }
-        // } else {
-        //     console.log("Public registration (no token), assigning 'user' role");
-        // }
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = new UserModel({
             firstName,
@@ -79,42 +61,33 @@ const signup = async (req, res) => {
             zip,
             email,
             username,
-            role: userRole,
-            status,
-            password
+            role: assignRoles || role || 'user',
+            status: status || 'Active',
+            password: hashedPassword
         });
 
-        console.log("newUser", newUser);
+        await newUser.save();
 
         try {
-            newUser.password = await bcrypt.hash(password, 10);
-        } catch (error) {
-            console.error("Error hashing password", error);
-            return res.status(500).json({
-                message: 'Error hashing password',
-                success: false
-            });
+            await sendConfirmationEmail(newUser.email, newUser.firstName, newUser.username, password);
+        } catch (emailErr) {
+            console.error("Email sending failed:", emailErr.message);
+            // We won't fail signup if email fails — optional: inform the user about this
         }
-        
-        // Only send the email if password is successfully hashed
-        sendConfirmationEmail(newUser.email, newUser.firstName, newUser.username, password);        
-
-        await newUser.save();
 
         res.status(201).json({
             message: 'Signup successful',
             success: true,
         });
+
     } catch (error) {
-        console.error(error);
+        console.error("Signup Error:", error.message);
         res.status(500).json({
-            message: 'Internal server error',
+            message: error.message || 'Internal server error',
             success: false,
         });
     }
 };
-
-
 
 // Login Controller
 const login = async (req, res) => {
