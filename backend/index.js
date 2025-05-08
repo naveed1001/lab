@@ -17,13 +17,31 @@ const app = express();
 // Middleware
 app.use(bodyParser.json());
 
+// app.use(cors({
+//   origin: [
+//     process.env.FRONTEND_URL_DEV,
+//     'http://localhost:3000'
+//   ],
+//   credentials: true
+// }));
+
+const allowedOrigins = [
+  'https://lab-frontend-chi.vercel.app',
+  'http://localhost:3000'
+];
+
 app.use(cors({
-  origin: [
-    process.env.FRONTEND_URL_DEV,
-    'http://localhost:3000'
-  ],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
+
 
 app.get('/', (req, res) => {
   res.json({
