@@ -40,7 +40,8 @@ const UserSchema = new Schema({
     zip: String,
     username: { 
         type: String, 
-        required: false 
+        required: false,
+        unique: false 
     },
     assignRoles: [String], 
     status: { 
