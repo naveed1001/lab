@@ -25,7 +25,6 @@ app.use(cors({
   credentials: true
 }));
 
-
 app.get('/', (req, res) => {
   res.json({
     status: 'API is working',

@@ -9,6 +9,7 @@ const signup = async (req, res) => {
         const {
             firstName,
             lastName,
+            name,
             practiceName,
             phone,
             streetAddress,
@@ -31,7 +32,7 @@ const signup = async (req, res) => {
             });
         }
 
-        const fullName = `${firstName} ${lastName}`.trim();
+        const fullName = name || `${firstName} ${lastName}`.trim();
         if (!fullName) {
             return res.status(400).json({
                 message: "First name and last name are required.",
