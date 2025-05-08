@@ -53,19 +53,19 @@ const signup = async (req, res) => {
 
         const userRole = assignRoles || role || 'user';
 
-        if (req.user) {
-            console.log("Authenticated user registration, req.user:", req.user);
-            const loggedInUser = req.user;
+        // if (req.user) {
+        //     console.log("Authenticated user registration, req.user:", req.user);
+        //     const loggedInUser = req.user;
 
-            if (loggedInUser.role !== 'admin' && userRole === 'admin') {
-                return res.status(403).json({
-                    message: "Only admins can create another admin.",
-                    success: false
-                });
-            }
-        } else {
-            console.log("Public registration (no token), assigning 'user' role");
-        }
+        //     if (loggedInUser.role !== 'admin' && userRole === 'admin') {
+        //         return res.status(403).json({
+        //             message: "Only admins can create another admin.",
+        //             success: false
+        //         });
+        //     }
+        // } else {
+        //     console.log("Public registration (no token), assigning 'user' role");
+        // }
 
         const newUser = new UserModel({
             firstName,
