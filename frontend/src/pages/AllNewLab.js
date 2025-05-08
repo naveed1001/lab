@@ -18,7 +18,7 @@ const AllNewLab = () => {
     useEffect(() => {
         const fetchLabs = async () => {
             try {
-                const response = await fetch(`${baseUrl}/auth/newlab-all`);
+                const response = await fetch(`${baseUrl}/api/auth/newlab-all`);
                 if (!response.ok) throw new Error('Failed to fetch lab data');
                 const data = await response.json();
                 setLabs(data);
@@ -50,7 +50,7 @@ const AllNewLab = () => {
     const handleDelete = (id) => {
         console.log('Delete lab with ID:', id);
         
-        fetch(`${baseUrl}/auth/newlab-delete/${id}`, {
+        fetch(`${baseUrl}/api/auth/newlab-delete/${id}`, {
             method: 'DELETE',
         })
         .then(response => {

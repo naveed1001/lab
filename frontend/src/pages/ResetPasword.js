@@ -14,7 +14,7 @@ function ResetPassword() {
     setError('');
     
     try {
-      await axios.post(`${baseUrl}/auth/request-reset`, { email });
+      await axios.post(`${baseUrl}/api/auth/request-reset`, { email });
       setMessage(`If this email exists, a reset link has been sent to ${email}`);
       setEmail('');
     } catch (err) {

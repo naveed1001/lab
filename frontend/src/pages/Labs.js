@@ -31,7 +31,7 @@ const CreateLabTestForm = () => {
     setError("");  
 
     try {
-      const response = await axios.post(`${baseUrl}/auth/lab-tests`,
+      const response = await axios.post(`${baseUrl}/api/auth/lab-tests`,
         formData,
         {
           headers: {

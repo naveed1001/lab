@@ -19,7 +19,7 @@ const PatientList = () => {
     useEffect(() => {
         const fetchPatients = async () => {
             try {
-                const response = await fetch(`${baseUrl}/auth/patient-all`);
+                const response = await fetch(`${baseUrl}/api/auth/patient-all`);
                 if (!response.ok) throw new Error('Failed to fetch patient data');
                 const data = await response.json();
                 setPatients(data);
@@ -51,7 +51,7 @@ const PatientList = () => {
     const handleDelete = (id) => {
         console.log('Delete patient with ID:', id);
         
-        fetch(`${baseUrl}/auth/patient-delete/${id}`, {
+        fetch(`${baseUrl}/api/auth/patient-delete/${id}`, {
             method: 'DELETE',
         })
         .then(response => {

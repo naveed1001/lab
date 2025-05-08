@@ -48,7 +48,7 @@ const CreatePatientProfile = () => {
         };
 
         try {
-            const response = await fetch(`${baseUrl}/auth/patient-create`, {
+            const response = await fetch(`${baseUrl}/api/auth/patient-create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

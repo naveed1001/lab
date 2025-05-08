@@ -33,7 +33,7 @@ function SetNewPassword() {
     }
 
     try {
-      await axios.post(`${baseUrl}/auth/reset-password`, { token, password });
+      await axios.post(`${baseUrl}/api/auth/reset-password`, { token, password });
       setMessage('Password has been reset successfully.');
       setTimeout(() => {
         navigate('/login'); 

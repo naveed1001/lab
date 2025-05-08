@@ -10,7 +10,7 @@ function GetAdmins() {
 
   const getAllAdmins = async () => {
     try {
-      const response = await fetch(`${baseUrl}/auth/admins`);
+      const response = await fetch(`${baseUrl}/api/auth/admins`);
       if (!response.ok) {
         throw new Error(`Error fetching admins: ${response.statusText}`);
       }

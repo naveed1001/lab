@@ -44,7 +44,7 @@ const SignupPage = () => {
       return;
     }
     try {
-      const url = `${baseUrl}/auth/signup`;
+      const url = `${baseUrl}/api/auth/signup`;
       const response = await fetch(url, {
         method: "POST",
         headers: {

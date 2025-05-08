@@ -21,7 +21,7 @@ function FileUpload() {
     formData.append("file", file);
 
     try {
-      const response = await fetch(`${baseUrl}/auth/import/csv`, {
+      const response = await fetch(`${baseUrl}/api/auth/import/csv`, {
         method: "POST",
         body: formData,
       });

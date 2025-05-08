@@ -30,7 +30,7 @@ const LabTestsList = () => {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.get(`${baseUrl}/auth/lab-tests`, {
+      const response = await axios.get(`${baseUrl}/api/auth/lab-tests`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
@@ -72,7 +72,7 @@ const LabTestsList = () => {
       draggable: false,
       onClose: async () => {
         try {
-          await axios.delete(`${baseUrl}/auth/lab-tests/${id}`, {
+          await axios.delete(`${baseUrl}/api/auth/lab-tests/${id}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("authToken")}`,
             },
@@ -104,7 +104,7 @@ const LabTestsList = () => {
 
     try {
       await axios.put(
-        `${baseUrl}/auth/lab-tests/${selectedTest._id}`,
+        `${baseUrl}/api/auth/lab-tests/${selectedTest._id}`,
         updatedTest,
         {
           headers: {
@@ -155,7 +155,7 @@ const LabTestsList = () => {
 
   const downloadCSV = async () => {
     try {
-      const response = await fetch(`${baseUrl}/auth/export/csv`, {
+      const response = await fetch(`${baseUrl}/api/auth/export/csv`, {
         method: 'GET',
       });
 

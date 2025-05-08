@@ -17,7 +17,7 @@ const PaymentGateway = () => {
                     throw new Error('Payment token is missing');
                 }
 
-                const response = await fetch(`${baseUrl}/book/orders/${orderId}/capture`, {
+                const response = await fetch(`${baseUrl}/api/book/orders/${orderId}/capture`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

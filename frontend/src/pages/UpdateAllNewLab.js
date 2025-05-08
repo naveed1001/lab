@@ -51,7 +51,7 @@ const UpdateNewLab = () => {
         setError("");
         setSuccess("");
         try {
-            const response = await fetch(`${baseUrl}/auth/newlab-update/${id}`, {
+            const response = await fetch(`${baseUrl}/api/auth/newlab-update/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

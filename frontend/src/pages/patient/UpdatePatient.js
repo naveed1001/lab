@@ -27,7 +27,7 @@ const UpdatePatientPage = () => {
     useEffect(() => {
         const fetchPatient = async () => {
             try {
-                const response = await fetch(`${baseUrl}/auth/patient/${id}`);
+                const response = await fetch(`${baseUrl}/api/auth/patient/${id}`);
                 if (!response.ok) throw new Error("Failed to fetch patient data");
                 const data = await response.json();
                 setPatient(data);
@@ -61,7 +61,7 @@ const UpdatePatientPage = () => {
         setError("");
         setSuccess("");
         try {
-            const response = await fetch(`${baseUrl}/auth/patient-update/${id}`, {
+            const response = await fetch(`${baseUrl}/api/auth/patient-update/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

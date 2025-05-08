@@ -31,7 +31,7 @@ function BookAppointment() {
     setSuccessMessage(null);
 
     try {
-        const response = await fetch(`${baseUrl}/book/createbook`, {
+        const response = await fetch(`${baseUrl}/api/book/createbook`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

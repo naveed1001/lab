@@ -16,7 +16,7 @@ const Cart = () => {
 
   const handlePurchase = async () => {
     try {
-      const response = await fetch(`${baseUrl}/book/orders`, {
+      const response = await fetch(`${baseUrl}/api/book/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

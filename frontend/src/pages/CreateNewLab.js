@@ -24,7 +24,7 @@ const CreateNewLab = () => {
     console.log("Form Data Submitted:", formData);
 
     try {
-        const response = await axios.post(`${baseUrl}/auth/create-new-lab`, formData);
+        const response = await axios.post(`${baseUrl}/api/auth/create-new-lab`, formData);
 
         if(response.status === 201){
             console.log("Lab created:", response.data);

@@ -20,7 +20,7 @@ const PaginatedUsers = ({ searchQuery }) => {
           return;
         }
 
-        const response = await axios.get(`${baseUrl}/auth/users`, {
+        const response = await axios.get(`${baseUrl}/api/auth/users`, {
           params: { page: currentPage, limit: 10, search: searchQuery },
           headers: { Authorization: `Bearer ${token}` },
         });

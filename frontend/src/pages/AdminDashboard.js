@@ -32,7 +32,7 @@ const AdminDashboard = () => {
         return;
       }
 
-      await axios.delete(`${baseUrl}/auth/users/${id}`, {
+      await axios.delete(`${baseUrl}/api/auth/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -67,12 +67,12 @@ const AdminDashboard = () => {
 
         setIsAdmin(decoded.role === 'admin');
 
-        const userResponse = await axios.get(`${baseUrl}/auth/user`, {
+        const userResponse = await axios.get(`${baseUrl}/api/auth/user`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCurrentUser(userResponse.data.user);
 
-        const usersResponse = await axios.get(`${baseUrl}/auth/user`, {
+        const usersResponse = await axios.get(`${baseUrl}/api/auth/user`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

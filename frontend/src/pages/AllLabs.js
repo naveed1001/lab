@@ -18,7 +18,7 @@ const CreateOrderForm = () => {
 
     useEffect(() => {
         axios
-            .get(`${baseUrl}/auth/newlab-all`)
+            .get(`${baseUrl}/api/auth/newlab-all`)
             .then((response) => setLabs(response.data))
             .catch((error) => console.error("Error fetching labs:", error));
     }, [baseUrl]);  // Add baseUrl to dependencies
@@ -26,7 +26,7 @@ const CreateOrderForm = () => {
     useEffect(() => {
         if (selectedOption) {
             axios
-                .get(`${baseUrl}/auth/lab-tests?labId=${selectedOption}`)
+                .get(`${baseUrl}/api/auth/lab-tests?labId=${selectedOption}`)
                 .then((response) => setFilteredData(response.data))
                 .catch((error) => console.error("Error fetching lab tests:", error));
         }
@@ -61,7 +61,7 @@ const CreateOrderForm = () => {
         }
 
         axios
-            .post(`${baseUrl}/auth/save-records`, {
+            .post(`${baseUrl}/api/auth/save-records`, {
                 type: "Labs",
                 data: selectedRecords,
                 email: selectedLab.email,
