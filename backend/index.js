@@ -12,10 +12,9 @@ require('dotenv').config();
 const app = express();
 
 // Database Connection
-connectDB().catch(err => {
-  console.error('Database connection failed:', err);
-  process.exit(1);
-});
+if (process.env.NODE_ENV !== 'production') {
+  connectDB();
+}
 
 // Middleware
 app.use(bodyParser.json());
@@ -79,11 +78,12 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal Server Error' });
 });
 
-// For local development
+if (require.main === module) {
   const PORT = process.env.PORT || 8100;
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
+}
 
-// Export for Vercel (remove app.listen)
+// Export app for Vercel
 module.exports = app;
