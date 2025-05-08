@@ -6,10 +6,10 @@
       "use": "@vercel/node",
       "config": {
         "includeFiles": [
-          "backend/**/*.js",
+          "backend/Controllers/**",
           "backend/Models/**",
           "backend/Routes/**",
-          "backend/Controllers/**"
+          "backend/Middlewares/**"
         ]
       }
     },
@@ -17,14 +17,13 @@
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "build",
-        "outputDirectory": "frontend/build"
+        "distDir": "frontend/build"
       }
     }
   ],
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "^/api/(.*)",
       "dest": "/backend/index.js"
     },
     {
@@ -33,10 +32,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/frontend/build/index.html",
-      "headers": {
-        "Cache-Control": "no-cache, no-store, must-revalidate"
-      }
+      "dest": "/frontend/build/index.html"
     }
   ]
 }
