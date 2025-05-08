@@ -1,12 +1,23 @@
 const Joi = require('joi');
 
-// Signup Validation
 const signupvalidation = (req, res, next) => {
     const schema = Joi.object({
-        name: Joi.string().min(3).max(100).required(),
+        firstName: Joi.string().required(),
+        lastName: Joi.string().required(),
+        practiceName: Joi.string().optional().allow(''),
+        phone: Joi.string().required(),
+        streetAddress: Joi.string().optional(),
+        city: Joi.string().optional(),
+        state: Joi.string().optional(),
+        zip: Joi.string().optional(),
         email: Joi.string().email().required(),
-        password: Joi.string().min(6).max(100).required(),
-        // role: Joi.string().valid('admin', 'user', 'moderator').required(), 
+        username: Joi.string().required(),
+        assignRoles: Joi.string().optional(),
+        status: Joi.string().optional(),
+        password: Joi.string().min(6).required(),
+        confirmPassword: Joi.string().min(6).required(),
+        name: Joi.string().optional(),
+        role: Joi.string().optional(),
     });
 
     const { error } = schema.validate(req.body);

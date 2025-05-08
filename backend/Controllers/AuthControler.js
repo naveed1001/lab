@@ -27,12 +27,12 @@ const signup = async (req, res) => {
 
         console.log("req.body ", req.body);
 
-        // if (password !== confirmPassword) {
-        //     return res.status(400).json({
-        //         message: "Passwords do not match.",
-        //         success: false
-        //     });
-        // }
+        if (password !== confirmPassword) {
+            return res.status(400).json({
+                message: "Passwords do not match.",
+                success: false
+            });
+        }
 
         const fullName = name || `${firstName} ${lastName}`.trim();
         if (!fullName) {
@@ -86,9 +86,6 @@ const signup = async (req, res) => {
 
         console.log("newUser", newUser);
 
-        // Send confirmation email with username and password
-        sendConfirmationEmail(newUser.email, newUser.firstName, newUser.username, password);
-
         try {
             newUser.password = await bcrypt.hash(password, 10);
         } catch (error) {
@@ -98,6 +95,9 @@ const signup = async (req, res) => {
                 success: false
             });
         }
+        
+        // Only send the email if password is successfully hashed
+        sendConfirmationEmail(newUser.email, newUser.firstName, newUser.username, password);        
 
         await newUser.save();
 
