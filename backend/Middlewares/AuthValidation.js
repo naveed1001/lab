@@ -8,7 +8,7 @@ const signupvalidation = (req, res, next) => {
         password: Joi.string().min(6).max(100).required(),
         confirmPassword: Joi.string().min(6).required(),
         practiceName: Joi.string().optional().allow(''),
-        phone: Joi.string().required(),
+        phone: Joi.string().optional(),
         streetAddress: Joi.string().optional(),
         city: Joi.string().optional(),
         state: Joi.string().optional(),
