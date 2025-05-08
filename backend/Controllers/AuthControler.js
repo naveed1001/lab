@@ -25,12 +25,12 @@ const signup = async (req, res) => {
             role
         } = req.body;
 
-        if (password !== confirmPassword) {
-            return res.status(400).json({
-                message: "Passwords do not match.",
-                success: false
-            });
-        }
+        // if (password !== confirmPassword) {
+        //     return res.status(400).json({
+        //         message: "Passwords do not match.",
+        //         success: false
+        //     });
+        // }
 
         const fullName = name || `${firstName} ${lastName}`.trim();
         if (!fullName) {
