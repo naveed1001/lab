@@ -62,7 +62,7 @@ const signup = async (req, res) => {
             zip,
             email,
             username,
-            role: assignRoles || role || 'admin',
+            role: assignRoles || role || 'user',
             status: status || 'Active',
             password: hashedPassword
         });
